@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Página Inicial{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h4 fw-bold mb-0">Lista de Livros</h1>
+        <a href="{% url 'cadastrar_livro' %}" class="btn btn-primary">
+            Novo Livro
+        </a>
+    </div>
+
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-10">
+            <input type="text" name="busca" placeholder="Buscar por nome..." value="{{ request.GET.busca }}"
+                class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Buscar</button>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th><a href="{% url 'ordenar_livros' 'nome' %}?busca={{ query }}">Nome</a></th>
+                    <th><a href="{% url 'ordenar_livros' 'autor' %}?busca={{ query }}">Autor</a></th>
+                    <th><a href="{% url 'ordenar_livros' 'descricao' %}?busca={{ query }}">Descrição</a></th>
+                    <th><a href="{% url 'ordenar_livros' 'data_publicacao' %}?busca={{ query }}">Publicado em</a></th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for livro in livros %}
+                <tr>
+                    <td>{{ livro.nome }}</td>
+                    <td>{{ livro.autor }}</td>
+                    <td>{{ livro.descricao|truncatechars:50 }}</td>
+                    <td>{{ livro.data_publicacao }}</td>
+                    <td>
+                        <a href="{% url 'editar_livro' id=livro.id %}" class="text-warning me-2 text-decoration-none">
+                            Editar
+                        </a>
+                        <a href="{% url 'deletar_livro' id=livro.id %}" class="text-danger text-decoration-none">
+                            Excluir
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-4">Nenhum livro cadastrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

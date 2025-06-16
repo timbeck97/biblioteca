@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Página Inicial{% endblock %}
+
+{% block content %}
+<section class="py-5 text-white" style="background: linear-gradient(to right, #1e40af, #2563eb, #60a5fa);">
+    <div class="text-center">
+        <h2 class="display-4 fw-bold mb-4 text-shadow">Bem-vindo à Livraria FACCAT</h2>
+        <p class="lead mb-4 mx-auto" style="max-width: 600px;">
+            Aqui você encontra os melhores livros para alimentar sua mente e sua imaginação.
+        </p>
+        <a href="{% url 'livros' %}" class="btn btn-light btn-lg px-4 py-2 fw-semibold shadow-sm">
+            Veja nosso catálogo
+        </a>
+    </div>
+</section>
+{% endblock %}
