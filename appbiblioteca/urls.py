@@ -23,5 +23,6 @@ urlpatterns = [
     path('', home, name='home'),
     path('livros/', include('livros.urls')),
     path('login/', LoginView.as_view(), name='login'),
+    path('accounts/login/', LoginView.as_view(), name='login'),
 
 ]

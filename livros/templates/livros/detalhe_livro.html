@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Página Inicial{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="card shadow-sm px-3 py-5">
+        <div class="d-flex flex-column flex-md-row">
+            <!-- Imagem à esquerda -->
+            <div style="min-width: 300px; max-width: 300px;">
+                {% if livro.url %}
+                <img src="{{ livro.url }}" alt="Capa do livro {{ livro.nome }}" class="img-fluid"
+                    style="max-height: 400px; object-fit: contain;">
+                {% else %}
+                <div class="bg-light d-flex justify-content-center align-items-center" style="height: 400px;">
+                    <span class="text-muted">Sem imagem disponível</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Conteúdo à direita -->
+            <div class="ms-md-4 mt-3 mt-md-0 flex-grow-1 d-flex justify-content-between flex-column">
+                <div>
+                    <h2 class="card-title">{{ livro.nome }}</h2>
+                    <h5 class="card-subtitle mb-2 text-muted">Autor: {{ livro.autor }}</h5>
+                    <p class="card-text">{{ livro.descricao }}</p>
+                    <p class="text-muted">Publicado em: {{ livro.data_publicacao }}</p>
+                </div>
+                <div>
+                    <a href="{% url 'reservar' id=livro.id %}" class="btn btn-primary me-2">Reservar</a>
+                    <a href="{% url 'livros' %}" class="btn btn-secondary">Voltar ao catálogo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

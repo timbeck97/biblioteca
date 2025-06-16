@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Livro
+from django.contrib.auth.decorators import login_required
+from .models import Livro, Reserva
 from .forms import LivroForm
 # Create your views here.
 ORDENACAO_LIVROS_LOOKUP = {
@@ -18,10 +19,20 @@ def livros(request):
         'livros':livros
     }
     return render(request, 'livros/lista_livros.html', dados)
-
+def livro_detalhes(request, id):
+    livro = get_object_or_404(Livro, id=id)
+    return render(request, 'livros/detalhe_livro.html', {'livro': livro})
+@login_required
 def reservar(request, id):
-    print(id)
-    return render(request, 'livros/reservar_livro.html')
+    livro = get_object_or_404(Livro, id=id)
+    # usuario = request.user  
+    print(f'reservando livro {livro}')
+    # reserva_existente = Reserva.objects.filter(usuario=usuario, livro=livro).exists()
+    # if not reserva_existente:
+    #     Reserva.objects.create(usuario=usuario, livro=livro)
+
+    return redirect('livro_detalhes', id=livro.id)
+
 
 
 def gerenciar_livros(request):

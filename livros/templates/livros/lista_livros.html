@@ -22,7 +22,7 @@
                     <p class="card-text text-muted small mt-auto">Publicado em: {{ livro.data_publicacao }}</p>
                 </div>
                 <div class="card-footer bg-transparent border-0">
-                    <a href="{% url 'reservar' id=livro.id %}" class="btn btn-primary w-100 fw-bold">Reservar</a>
+                    <a href="{% url 'livro_detalhes' id=livro.id %}" class="btn btn-primary w-100 fw-bold">Reservar</a>
                 </div>
             </div>
         </div>
