@@ -40,12 +40,14 @@
                     <td>{{ livro.descricao|truncatechars:50 }}</td>
                     <td>{{ livro.data_publicacao }}</td>
                     <td>
-                        <a href="{% url 'editar_livro' id=livro.id %}" class="text-warning me-2 text-decoration-none">
-                            Editar
-                        </a>
-                        <a href="{% url 'deletar_livro' id=livro.id %}" class="text-danger text-decoration-none">
-                            Excluir
-                        </a>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'editar_livro' id=livro.id %}" class="btn btn-warning btn-sm">
+                                Editar
+                            </a>
+                            <a href="{% url 'deletar_livro' id=livro.id %}" class="btn btn-danger btn-sm">
+                                Excluir
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 {% empty %}
