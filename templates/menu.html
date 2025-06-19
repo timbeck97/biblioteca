@@ -17,7 +17,7 @@
                 <!-- <li class="nav-item">
                     <a class="nav-link" href="{% url 'livros' %}">Reservas</a>
                 </li> -->
-
+                {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="gerenciarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -25,11 +25,35 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="gerenciarDropdown">
                         <li><a class="dropdown-item" href="{% url 'gerenciar_livros' %}">Livros</a></li>
-                     
+                        <li><a class="dropdown-item" href="{% url 'gerenciar_emprestimos' %}">Empréstimos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'gerenciar_reservas' %}">Reservas</a></li>
+                        <li><a class="dropdown-item" href="{% url 'gerenciar_clientes' %}">Clientes</a></li>
+                        {% if user.is_superuser %}
+                        <li><a class="dropdown-item" href="{% url 'gerenciar_funcionarios' %}">Funcionários</a></li>
+                        {% endif %}
+
+
+                    </ul>
+                </li>
+                {% endif %}
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="configuracoesDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Configurações
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="configuracoesDropdown">
+                        {% if user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'logout' %}">Sair</a></li>
+                        {% else %}
+                        <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+                        {% endif %}
+
+
                     </ul>
                 </li>
 
-            
+
             </ul>
         </div>
     </div>

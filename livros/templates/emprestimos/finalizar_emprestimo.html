@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Confirmar Empréstimo{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h4>Confirmar empréstimo</h4>
+    <p><strong>Livro:</strong> {{ livro.nome }}</p>
+    <p><strong>Cliente:</strong> {{ cliente.nome }}</p>
+
+    {% include 'messages.html' %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="id_data_emprestimo" class="form-label">Data do Empréstimo</label>
+            <input type="date" name="data_emprestimo" id="id_data_emprestimo" class="form-control"
+                value="{{ data_emprestimo|default:'' }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="id_data_devolucao" class="form-label">Data da Devolução</label>
+            <input type="date" name="data_devolucao" id="id_data_devolucao" class="form-control"
+                value="{{ data_devolucao|default:'' }}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Confirmar Empréstimo</button>
+    </form>
+
+</div>
+{% endblock %}

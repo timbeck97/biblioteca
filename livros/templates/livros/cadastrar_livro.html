@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 {% block title %}Página Inicial{% endblock %}
@@ -28,6 +27,26 @@
             <div class="mb-3">
                 <label for="id_descricao" class="form-label">Descrição</label>
                 {{ form.descricao|add_class:"form-control" }}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_ano_publicacao" class="form-label">Ano de Publicação</label>
+                {{ form.ano_publicacao|add_class:"form-control" }}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_isbn" class="form-label">ISBN</label>
+                {{ form.isbn|add_class:"form-control" }}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_genero" class="form-label">Gênero</label>
+                {{ form.genero|add_class:"form-select" }}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_quantidade" class="form-label">Quantidade em Estoque</label>
+                {{ form.quantidade|add_class:"form-control" }}
             </div>
 
             <div class="mb-3">

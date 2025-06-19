@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h4 fw-bold mb-0">Lista de Clientes</h1>
+        <a href="{% url 'cadastrar_cliente' %}" class="btn btn-primary">
+            Novo Cliente
+        </a>
+    </div>
+
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-10">
+            <input type="text" name="busca" placeholder="Buscar por nome..." value="{{ request.GET.busca }}"
+                class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Buscar</button>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Endereço</th>
+                    <th>Logradouro</th>
+                    <th>Bairro</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes %}
+                <tr>
+                    <td>{{ cliente.nome }}</td>
+                    <td>{{ cliente.cpf }}</td>
+                    <td>{{ cliente.endereco }}</td>
+                    <td>{{ cliente.logradouro }}</td>
+                    <td>{{ cliente.bairro }}</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'editar_cliente' cliente.id %}" class="btn btn-warning btn-sm">
+                                Editar
+                            </a>
+                            <a href="{% url 'deletar_cliente' cliente.id %}" class="btn btn-danger btn-sm">
+                                Excluir
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4">Nenhum cliente cadastrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

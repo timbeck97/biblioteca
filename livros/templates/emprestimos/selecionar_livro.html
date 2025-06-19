@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastrar Emprestimo de Livro{% endblock %}
+
+{% block content %}
+<div class="my-4 px-5">
+   <form method="get" class="row g-2 mb-4">
+      <div class="col-md-10">
+         <input type="text" name="busca" placeholder="Buscar por nome..." value="{{ request.GET.busca }}"
+            class="form-control" />
+      </div>
+      <div class="col-md-2">
+         <button type="submit" class="btn btn-primary w-100">Buscar</button>
+      </div>
+   </form>
+    {% include 'messages.html' %}
+   <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+         <thead class="table-light">
+            <tr>
+               <th>
+                  <div class="d-flex justify-content-between align-items-center">
+                     <span>Nome</span>
+                  </div>
+               </th>
+
+               <th>
+                  <div class="d-flex justify-content-between align-items-center">
+                     <span>Autor</span>
+
+                  </div>
+               </th>
+
+               <th>
+                  <div class="d-flex justify-content-between align-items-center">
+                     <span>Descrição</span>
+
+                  </div>
+               </th>
+
+               <th>
+                  <div class="d-flex justify-content-between align-items-center">
+                     <span>Publicado em</span>
+
+                  </div>
+               </th>
+
+               <th>
+                  <div class="d-flex justify-content-between align-items-center">
+                     <span>Gênero</span>
+
+                  </div>
+               </th>
+
+               <th>
+                  <div class="d-flex justify-content-between align-items-center">
+                     <span>Exemplares Disponíveis</span>
+                  </div>
+               </th>
+
+               <th></th>
+            </tr>
+
+         </thead>
+         <tbody>
+            {% for livro in livros %}
+            <tr>
+               <td>{{ livro.nome }}</td>
+               <td>{{ livro.autor }}</td>
+               <td>{{ livro.descricao|truncatechars:50 }}</td>
+               <td>{{ livro.ano_publicacao }}</td>
+               <td>{{ livro.get_genero_display }}</td>
+               <td>{{ livro.exemplares_disponiveis }}</td>
+               <td>
+                  <a href="{% url 'selecionar_cliente_emprestimo' livro.id %}" class="btn btn-primary btn-sm"">
+                     Selecionar
+                  </a>
+               </td>
+            </tr>
+            {% empty %}
+            <tr>
+               <td colspan=" 7" class="text-center py-4">Nenhum livro cadastrado.
+               </td>
+            </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+      <a href="{% url 'gerenciar_emprestimos' %}" class="btn btn-secondary btn-sm">Voltar </a>
+
+   </div>
+</div>
+{% endblock %}

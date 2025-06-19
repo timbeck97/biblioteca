@@ -3,7 +3,7 @@
 {% block title %}Página Inicial{% endblock %}
 
 {% block content %}
-<div class="container my-4">
+<div class="my-4 px-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h4 fw-bold mb-0">Lista de Livros</h1>
         <a href="{% url 'cadastrar_livro' %}" class="btn btn-primary">
@@ -25,12 +25,122 @@
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-light">
                 <tr>
-                    <th><a href="{% url 'ordenar_livros' 'nome' %}?busca={{ query }}">Nome</a></th>
-                    <th><a href="{% url 'ordenar_livros' 'autor' %}?busca={{ query }}">Autor</a></th>
-                    <th><a href="{% url 'ordenar_livros' 'descricao' %}?busca={{ query }}">Descrição</a></th>
-                    <th><a href="{% url 'ordenar_livros' 'data_publicacao' %}?busca={{ query }}">Publicado em</a></th>
-                    <th>Ações</th>
+                    <th>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Nome</span>
+                            <div class="d-flex flex-column">
+                                <a href="{% url 'ordenar_livros' 'nome' %}?busca={{ request.GET.busca }}&ordenacao=asc"
+                                    class="sort-arrow {% if campo_ordenado == 'nome' and ordenacao == 'asc' %}active{% endif %}"
+                                    style="text-decoration: none;">
+                                    &#9650;
+                                </a>
+                                <a href="{% url 'ordenar_livros' 'nome' %}?busca={{ request.GET.busca }}&ordenacao=desc"
+                                    class="sort-arrow {% if campo_ordenado == 'nome' and ordenacao == 'desc' %}active{% endif %}"
+                                    style="text-decoration: none;">
+                                    &#9660;
+                                </a>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Autor</span>
+                            <div class="d-flex flex-column">
+                                <a href="{% url 'ordenar_livros' 'autor' %}?busca={{ request.GET.busca }}&ordenacao=asc"
+                                    class="sort-arrow {% if campo_ordenado == 'autor' and ordenacao == 'asc' %}active{% endif %}"
+                                    style="text-decoration: none;">
+                                    &#9650;
+                                </a>
+                                <a href="{% url 'ordenar_livros' 'autor' %}?busca={{ request.GET.busca }}&ordenacao=desc"
+                                    class="sort-arrow {% if campo_ordenado == 'autor' and ordenacao == 'desc' %}active{% endif %}"
+                                    style="text-decoration: none;">
+                                    &#9660;
+                                </a>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Descrição</span>
+                            <div class="d-flex flex-column">
+                                <a href="{% url 'ordenar_livros' 'descricao' %}?busca={{ request.GET.busca }}&ordenacao=asc"
+                                    class="sort-arrow {% if campo_ordenado == 'descricao' and ordenacao == 'asc' %}active{% endif %}"
+                                    style="text-decoration: none;">
+                                    &#9650;
+                                </a>
+                                <a href="{% url 'ordenar_livros' 'descricao' %}?busca={{ request.GET.busca }}&ordenacao=desc"
+                                    class="sort-arrow {% if campo_ordenado == 'descricao' and ordenacao == 'desc' %}active{% endif %}"
+                                    style="text-decoration: none;">
+                                    &#9660;
+                                </a>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Publicado em</span>
+                            <div class="d-flex flex-column">
+                                <a href="{% url 'ordenar_livros' 'ano_publicacao' %}?busca={{ request.GET.busca }}&ordenacao=asc"
+                                    class="sort-arrow {% if campo_ordenado == 'ano_publicacao' and ordenacao == 'asc' %}active{% endif %}"
+                                    style="text-decoration: none;">
+                                    &#9650;
+                                </a>
+                                <a href="{% url 'ordenar_livros' 'ano_publicacao' %}?busca={{ request.GET.busca }}&ordenacao=desc"
+                                    class="sort-arrow {% if campo_ordenado == 'ano_publicacao' and ordenacao == 'desc' %}active{% endif %}"
+                                    style="text-decoration: none;">
+                                    &#9660;
+                                </a>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Gênero</span>
+                            <div class="d-flex flex-column">
+                                <a href="{% url 'ordenar_livros' 'genero' %}?busca={{ request.GET.busca }}&ordenacao=asc"
+                                    class="sort-arrow {% if campo_ordenado == 'genero' and ordenacao == 'asc' %}active{% endif %}"
+                                    style="text-decoration: none;">
+                                    &#9650;
+                                </a>
+                                <a href="{% url 'ordenar_livros' 'genero' %}?busca={{ request.GET.busca }}&ordenacao=desc"
+                                    class="sort-arrow {% if campo_ordenado == 'genero' and ordenacao == 'desc' %}active{% endif %}"
+                                    style="text-decoration: none;">
+                                    &#9660;
+                                </a>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Quantidade</span>
+                            <div class="d-flex flex-column">
+                                <a href="{% url 'ordenar_livros' 'quantidade' %}?busca={{ request.GET.busca }}&ordenacao=asc"
+                                    class="sort-arrow {% if campo_ordenado == 'quantidade' and ordenacao == 'asc' %}active{% endif %}"
+                                    style="text-decoration: none;">
+                                    &#9650;
+                                </a>
+                                <a href="{% url 'ordenar_livros' 'quantidade' %}?busca={{ request.GET.busca }}&ordenacao=desc"
+                                    class="sort-arrow {% if campo_ordenado == 'quantidade' and ordenacao == 'desc' %}active{% endif %}"
+                                    style="text-decoration: none;">
+                                    &#9660;
+                                </a>
+                            </div>
+                        </div>
+                    </th>
+                      <th>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <span>Exemplares Disponíveis</span>
+                        </div>
+                    </th>
+
+                    <th></th>
                 </tr>
+
             </thead>
             <tbody>
                 {% for livro in livros %}
@@ -38,21 +148,31 @@
                     <td>{{ livro.nome }}</td>
                     <td>{{ livro.autor }}</td>
                     <td>{{ livro.descricao|truncatechars:50 }}</td>
-                    <td>{{ livro.data_publicacao }}</td>
+                    <td>{{ livro.ano_publicacao }}</td>
+                    <td>{{ livro.get_genero_display }}</td>
+                    <td>{{ livro.quantidade }}</td>
+                    <td>{{ livro.exemplares_disponiveis }}</td>
                     <td>
-                        <div class="d-flex gap-2">
-                            <a href="{% url 'editar_livro' id=livro.id %}" class="btn btn-warning btn-sm">
-                                Editar
-                            </a>
-                            <a href="{% url 'deletar_livro' id=livro.id %}" class="btn btn-danger btn-sm">
-                                Excluir
-                            </a>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Ações
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li> <a href="{% url 'editar_livro' id=livro.id %}" class="dropdown-item">
+                                        Editar
+                                    </a></li>
+                                <li> <a href="{% url 'deletar_livro' id=livro.id %}" class="dropdown-item">
+                                        Excluir
+                                    </a></li>
+                            </ul>
                         </div>
+
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="text-center py-4">Nenhum livro cadastrado.</td>
+                    <td colspan="7" class="text-center py-4">Nenhum livro cadastrado.</td>
                 </tr>
                 {% endfor %}
             </tbody>

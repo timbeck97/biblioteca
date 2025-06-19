@@ -1,9 +1,14 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-# Create your models here.
-class Usuario(models.Model):
-    
-    cpf = models.CharField(max_length=11)
+
+class Funcionario(AbstractUser):
+    ativado = models.BooleanField(default=True)
+    def __str__(self):
+        return self.username
+class Cliente(models.Model):
+    cpf = models.CharField(max_length=11, unique=True)
+    email = models.EmailField()
     nome = models.CharField(max_length=50)
     endereco = models.CharField(max_length=30)
     logradouro = models.CharField(max_length=20)

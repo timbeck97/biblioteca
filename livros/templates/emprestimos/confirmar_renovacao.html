@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Confirmar Renovação{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h4>Confirmar renovação de empréstimo</h4>
+    <p><strong>Livro:</strong> {{ livro.nome }}</p>
+    <p><strong>Cliente:</strong> {{ cliente.nome }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="{{ form.nova_data_devolucao.id_for_label }}" class="form-label">
+                {{ form.nova_data_devolucao.label }}
+            </label>
+            {{ form.nova_data_devolucao }}
+
+            {% if form.nova_data_devolucao.errors %}
+            <div class="text-danger mt-1">
+                {{ form.nova_data_devolucao.errors }}
+            </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Renovar</button>
+    </form>
+    {% include 'messages.html' %}
+
+</div>
+{% endblock %}

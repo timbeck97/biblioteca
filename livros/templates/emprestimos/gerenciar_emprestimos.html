@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Gerenciar Emprestimos{% endblock %}
+
+{% block content %}
+<div class="my-4 px-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h4 fw-bold mb-0">Lista de Empréstimos de livros</h1>
+        <a href="{% url 'selecionar_livro_emprestimo' %}" class="btn btn-primary">Novo Emprestimo</a>
+    </div>
+
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-10">
+            <input type="text" name="busca" placeholder="Buscar por cliente ou livro..." value="{{ request.GET.busca }}"
+                class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Buscar</button>
+        </div>
+    </form>
+    {% include 'messages.html' %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Cliente</th>
+                    <th>Livro</th>
+                    <th>Data do Emprestimo</th>
+                    <th>Data de Devolução</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emprestimo in emprestimos %}
+                <tr>
+                    <td>{{ emprestimo.cliente.nome }}</td>
+                    <td>{{ emprestimo.livro.nome }}</td>
+                    <td>{{ emprestimo.data_emprestimo }}</td>
+                    <td>{{ emprestimo.data_devolucao }}</td>
+                    <td>{{ emprestimo.get_status_display }}</td>
+                    <td>
+
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Ações
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li> <a href="{% url 'renovar' id_emprestimo=emprestimo.id %}" class="dropdown-item">
+                                        Renovar
+                                    </a></li>
+                                <li> <a href="{% url 'deletar_emprestimo' emprestimo.id %}"
+                                        class="dropdown-item">Excluir</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-4">Nenhuma emprestimo cadastrada.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

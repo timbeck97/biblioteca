@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h4 fw-bold mb-0">Lista de Funcionários</h1>
+        <a href="{% url 'cadastrar_funcionario' %}" class="btn btn-primary">
+            Novo Funcionário
+        </a>
+    </div>
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-10">
+            <input type="text" name="busca" placeholder="Buscar por nome..." value="{{ request.GET.busca }}"
+                class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Buscar</button>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Nome</th>
+                    <th>Ativado</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for funcionario in funcionarios %}
+                <tr>
+                    <td>{{ funcionario.username }}</td>
+                    <td>{{ funcionario.ativado }}</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'editar_funcionario' funcionario.id %}" class="btn btn-warning btn-sm">
+                                Editar
+                            </a>
+                            <form method="post" action="{% url 'deletar_funcionario' funcionario.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center py-4">Nenhum funcionário cadastrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
