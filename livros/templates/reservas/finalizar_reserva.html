@@ -26,30 +26,17 @@
     </div>
   </div>
 
-  <!-- Cliente + Formulário -->
+  <!-- Cliente e confirmação -->
   <div class="card shadow-sm p-3 mb-4">
-    <h4 class="mb-3">Confirmar Empréstimo</h4>
+    <h4 class="mb-3">Confirmar Reserva</h4>
 
     <p><strong>Cliente:</strong> {{ cliente.nome }}</p>
     <p><strong>CPF:</strong> {{ cliente.cpf }}</p>
-
+    
     {% include 'messages.html' %}
-
+    
     <form method="post">
       {% csrf_token %}
-
-      <div class="mb-3">
-        <label for="id_data_emprestimo" class="form-label">Data do Empréstimo</label>
-        <input type="date" name="data_emprestimo" id="id_data_emprestimo" class="form-control"
-               value="{{ data_emprestimo|default:'' }}">
-      </div>
-
-      <div class="mb-3">
-        <label for="id_data_devolucao" class="form-label">Data da Devolução</label>
-        <input type="date" name="data_devolucao" id="id_data_devolucao" class="form-control"
-               value="{{ data_devolucao|default:'' }}">
-      </div>
-
       <button type="submit" class="btn btn-primary">Confirmar Empréstimo</button>
       <a href="{% url 'gerenciar_emprestimos' %}" class="btn btn-secondary">Voltar</a>
     </form>

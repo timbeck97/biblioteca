@@ -72,7 +72,8 @@
                <td>{{ livro.get_genero_display }}</td>
                <td>{{ livro.exemplares_disponiveis }}</td>
                <td>
-                  <a href="{% url 'selecionar_cliente_emprestimo' livro.id %}" class="btn btn-primary btn-sm"">
+                  {% url redirect livro.id as redir_url %}
+                  <a href="{{ redir_url }}" class="btn btn-primary btn-sm"">
                      Selecionar
                   </a>
                </td>

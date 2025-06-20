@@ -6,7 +6,7 @@
 <div class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h4 fw-bold mb-0">Lista de Reservas</h1>
-        <a href="{% url 'cadastrar_reserva' %}" class="btn btn-primary">Nova Reserva</a>
+        <a href="{% url 'selecionar_livro_reserva' %}" class="btn btn-primary">Nova Reserva</a>
     </div>
 
     <form method="get" class="row g-2 mb-4">
@@ -25,7 +25,7 @@
                     <th>Cliente</th>
                     <th>Livro</th>
                     <th>Data da Reserva</th>
-                    <th>Data de Devolução</th>
+                    <th>Status</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -34,13 +34,10 @@
                 <tr>
                     <td>{{ reserva.cliente.nome }}</td>
                     <td>{{ reserva.livro.nome }}</td>
-                    <td>{{ reserva.data_reserva }}</td>
-                    <td>{{ reserva.data_devolucao }}</td>
+                    <td>{{ reserva.data_solicitacao | date:"d/m/Y"  }}</td>
+                    <td>{{ reserva.get_status_display }}</td>
                     <td>
-                        <div class="d-flex gap-2">
-                            <a href="{% url 'editar_reserva' reserva.id %}" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="{% url 'deletar_reserva' reserva.id %}" class="btn btn-danger btn-sm">Excluir</a>
-                        </div>
+                      <a href="{% url 'deletar_reserva' reserva.id%}" class="btn btn-warning btm-md">Deletar</a>
                     </td>
                 </tr>
                 {% empty %}

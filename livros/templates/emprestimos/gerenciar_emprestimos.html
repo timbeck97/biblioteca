@@ -19,7 +19,7 @@
         </div>
     </form>
     {% include 'messages.html' %}
-    <div class="table-responsive">
+    <div class="table-responsive" style="overflow: visible !important;">
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-light">
                 <tr>
@@ -36,22 +36,30 @@
                 <tr>
                     <td>{{ emprestimo.cliente.nome }}</td>
                     <td>{{ emprestimo.livro.nome }}</td>
-                    <td>{{ emprestimo.data_emprestimo }}</td>
-                    <td>{{ emprestimo.data_devolucao }}</td>
+                    <td>{{ emprestimo.data_emprestimo |date:"d/m/Y" }}</td>
+                    <td>{{ emprestimo.data_devolucao |date:"d/m/Y" }}</td>
                     <td>{{ emprestimo.get_status_display }}</td>
                     <td>
 
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static"
                                 aria-expanded="false">
                                 Ações
                             </button>
                             <ul class="dropdown-menu">
+                               {% if emprestimo.status != 'FINALIZADO'%}
                                 <li> <a href="{% url 'renovar' id_emprestimo=emprestimo.id %}" class="dropdown-item">
                                         Renovar
                                     </a></li>
+                                    <li> <a href="{% url 'devolver_emprestimo' id_emprestimo=emprestimo.id %}" class="dropdown-item">
+                                    Devolver
+                                </a></li>
+                               {% endif %}
+                                 <!-- <li> <a href="{% url 'editar_emprestimo' emprestimo.id %}"
+                                        class="dropdown-item">Editar</a></li> -->
                                 <li> <a href="{% url 'deletar_emprestimo' emprestimo.id %}"
                                         class="dropdown-item">Excluir</a></li>
+                                
                             </ul>
                         </div>
                     </td>

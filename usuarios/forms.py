@@ -14,7 +14,7 @@ class FuncionarioForm(UserCreationForm):
 class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
-        fields = ['cpf', 'nome', 'endereco', 'logradouro', 'bairro']
+        fields = ['cpf', 'nome', 'email', 'endereco', 'logradouro', 'bairro']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

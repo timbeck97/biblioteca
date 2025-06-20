@@ -31,12 +31,25 @@ class Livro(models.Model):
     genero = models.CharField(max_length=20, choices=GENEROS, default='ficcao')
     quantidade = models.PositiveIntegerField(default=0)
     def exemplares_disponiveis(self):
-        quantidade_emprestimos = self.emprestimo_set.count()
+        quantidade_emprestimos = self.emprestimo_set.exclude(status='FINALIZADO').count()
         disponiveis = self.quantidade - quantidade_emprestimos
-        print('teste')
         return max(disponiveis, 0)
     def __str__(self):
         return self.nome
+    def save(self, *args, **kwargs):
+        if self.nome:
+            self.nome = self.formatar_nome_curso(self.nome)
+        super().save(*args, **kwargs)
+
+    def formatar_nome_curso(self, nome):
+        partes = nome.lower().split()
+        minusculas = ['da', 'de', 'do', 'das', 'dos', 'e',
+                      'em', 'a', 'o', 'as', 'os', 'para', 'com']
+
+        return ' '.join([
+            p if p in minusculas else p.capitalize()
+            for p in partes
+        ])
 class Emprestimo(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     livro = models.ForeignKey(Livro,on_delete=models.CASCADE)
