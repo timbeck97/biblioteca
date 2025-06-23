@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.utils.dateparse import parse_date
 from datetime import date,datetime
 from django.utils.timezone import localdate
-from .models import Livro, Emprestimo, Reserva
+from .models import Livro, Emprestimo, Reserva, Infracao
 from usuarios.models import Cliente
-from .forms import LivroForm, RenovarEmprestimoForm
+from .forms import LivroForm, RenovarEmprestimoForm, InfracaoForm
 from django.core.mail import send_mail
 
 ORDENACAO_LIVROS_LOOKUP = {
@@ -390,4 +390,71 @@ def deletar_reserva(request, id):
     reserva.delete()
     return redirect('gerenciar_reservas')
 
+@login_required
+def relatorios(request, tipo):
+    return render(request, 'relatorios/relatorios.html',{
+        'tipo':tipo
+    })
+@login_required
+def registrar_infracao(request, emprestimo_id):
+    emprestimo = get_object_or_404(Emprestimo, id=emprestimo_id)
+  
+    if request.method == 'POST':
+        form = InfracaoForm(request.POST)
+        if form.is_valid():
+            ocorrencia = form.cleaned_data['ocorrencia']
+            bloquear_cliente = form.cleaned_data['bloquear_cliente']
+            if bloquear_cliente == True:
+                cliente = emprestimo.cliente 
+                cliente.bloqueado = True 
+                cliente.save()
+            Infracao.objects.create(
+                emprestimo = emprestimo,
+                bloquear_cliente=bloquear_cliente,
+                ocorrencia = ocorrencia
+            )
+            print(f'ocorrencia: {ocorrencia} -- bloquear: {bloquear_cliente}')
+            return redirect('gerenciar_emprestimos')
+    
+    form = InfracaoForm()
+    dados = {
+        'livro':emprestimo.livro,
+        'cliente':emprestimo.cliente,
+        'form':form
+    }
+    return render(request,'livros/registrar_infracao.html', dados)
+@login_required
+def infracoes(request):
+    infracoes = Infracao.objects.all()
+    return render(request, 'livros/infracoes.html', {
+        'infracoes':infracoes
+    })
+@login_required
+def deletar_infracao(request, id):
+    infracao = get_object_or_404(Infracao, id=id)
+    infracao.delete()
+    return redirect('infracoes')
 
+def relatorio_emprestimos_cliente(request):
+    dados = (
+        Emprestimo.objects
+        .values('cliente__nome')
+        .annotate(total=Count('id'))
+        .order_by('-total')
+    )
+    return render(request, 'relatorios/relatorios.html', {
+        'tipo': 'CLIENTE',
+        'dados': dados
+    })
+
+def relatorio_livros_mais_emprestados(request):
+    dados = (
+        Emprestimo.objects
+        .values('livro__nome')
+        .annotate(total=Count('id'))
+        .order_by('-total')
+    )
+    return render(request, 'relatorios/relatorios.html', {
+        'tipo': 'LIVROS',
+        'dados': dados
+    })

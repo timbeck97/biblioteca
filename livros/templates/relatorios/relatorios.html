@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Relatórios{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="btn-group" role="group" aria-label="Grupo de relatórios">
+                <a href="{% url 'relatorio_emprestimos_cliente' %}"
+                    class="btn {% if tipo == 'CLIENTE' %}btn-success{% else %}btn-secondary{% endif %}">
+                    Empréstimos por cliente
+                </a>
+                <a href="{% url 'relatorio_livros_mais_emprestados' %}"
+                    class="btn {% if tipo == 'LIVROS' %}btn-success{% else %}btn-secondary{% endif %}">
+                    Livros mais emprestados
+                </a>
+                <a href="#" class="btn {% if tipo == 'ATRASO' %}btn-success{% else %}btn-secondary{% endif %}">
+                    Outro
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        {% if tipo == 'CLIENTE' %}
+        <h2 class="h4 fw-bold mb-3">Empréstimos por Cliente</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Total de Empréstimos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in dados %}
+                    <tr>
+                        <td>{{ item.cliente__nome }}</td>
+                        <td>{{ item.total }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="text-center">Nenhum empréstimo encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% elif tipo == 'LIVROS' %}
+        <h2 class="h4 fw-bold mb-3">Livros Mais Emprestados</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Livro</th>
+                        <th>Total de Empréstimos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in dados %}
+                    <tr>
+                        <td>{{ item.livro__nome }}</td>
+                        <td>{{ item.total }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="text-center">Nenhum empréstimo encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% elif tipo == 'ATRASO' %}
+        <h2 class="h4 fw-bold mb-3">Devoluções em Atraso</h2>
+        <!-- Tabela ou conteúdo para atrasos -->
+
+        {% else %}
+        <div class="alert alert-info">Selecione um relatório acima para visualizar os dados.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

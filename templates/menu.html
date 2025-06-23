@@ -27,6 +27,7 @@
                         <li><a class="dropdown-item" href="{% url 'gerenciar_livros' %}">Livros</a></li>
                         <li><a class="dropdown-item" href="{% url 'gerenciar_emprestimos' %}">Empréstimos</a></li>
                         <li><a class="dropdown-item" href="{% url 'gerenciar_reservas' %}">Reservas</a></li>
+                        <li><a class="dropdown-item" href="{% url 'infracoes' %}">Infrações</a></li>
                         <li><a class="dropdown-item" href="{% url 'gerenciar_clientes' %}">Clientes</a></li>
                         {% if user.is_superuser %}
                         <li><a class="dropdown-item" href="{% url 'gerenciar_funcionarios' %}">Funcionários</a></li>
@@ -34,6 +35,9 @@
 
 
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'relatorio_emprestimos_cliente' %}">Relatórios</a>
                 </li>
                 {% endif %}
 

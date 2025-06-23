@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Gerenciar Infrações{% endblock %}
+
+{% block content %}
+<div class="my-4 px-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h4 fw-bold mb-0">Lista de Infrações</h1>
+    </div>
+
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-10">
+            <input type="text" name="busca" placeholder="Buscar por cliente ou motivo..." value="{{ request.GET.busca }}"
+                class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Buscar</button>
+        </div>
+    </form>
+
+    {% include 'messages.html' %}
+
+    <div class="table-responsive" style="overflow: visible !important;">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Cliente</th>
+                    <th>Livro</th>
+                    <th>Data</th>
+                    <th>Motivo</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for infracao in infracoes %}
+                <tr>
+                    <td>{{ infracao.emprestimo.cliente.nome }}</td>
+                    <td>{{ infracao.emprestimo.livro.nome }}</td>
+                    <td>{{ infracao.data_infracao|date:"d/m/Y" }}</td>
+                    <td>{{ infracao.get_ocorrencia_display }}</td>
+                    <td>
+                        <form method="post" action="{% url 'deletar_infracao' infracao.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta infração?');">
+                                Excluir
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-4">Nenhuma infração registrada.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

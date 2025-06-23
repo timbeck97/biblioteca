@@ -20,6 +20,10 @@ STATUS_RESERVA = [
     ('AGUARDANDO','Aguardando'),
     ('FINALIZADA','Finalizada')
 ]
+CHOICE_OCORRENCIA = [
+    ('PERDIDO', 'Perdido'),
+    ('DANIFICADO', 'Danificado')
+]
 class Livro(models.Model):
     nome = models.CharField(max_length=100)
     autor = models.CharField(max_length=100)
@@ -58,7 +62,7 @@ class Emprestimo(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_EMPRESTIMO, default='EM_ANDAMENTO')
 
     def __str__(self):
-        return f'{self.cliente.nome} locou o livro {self.livro.titulo} no dia {self.data_emprestimo} e devolve no dia {self.data_devolucao} - Status - {self.status}'
+        return f'{self.cliente.nome} locou o livro {self.livro.nome} no dia {self.data_emprestimo} e devolve no dia {self.data_devolucao} - Status - {self.status}'
 
 class Reserva(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
@@ -68,3 +72,8 @@ class Reserva(models.Model):
 
     def __str__(self):
         return f'Cliente {self.cliente.nome} reservou o livro {self.livro.nome} no dia {self.data_solicitacao}'
+class Infracao(models.Model):
+    emprestimo = models.ForeignKey(Emprestimo, on_delete=models.CASCADE)
+    ocorrencia = models.CharField(max_length=20, choices=CHOICE_OCORRENCIA)
+    bloquear_cliente = models.BooleanField(default=True)
+    data_infracao = models.DateField(auto_now_add=True)

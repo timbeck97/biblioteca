@@ -52,3 +52,20 @@ class RenovarEmprestimoForm(forms.Form):
         ),
         input_formats=['%Y-%m-%d']
     )
+class InfracaoForm(forms.Form):
+    ocorrencia = forms.ChoiceField(
+        choices=[
+            ('', 'Selecione uma opção'),
+            ('PERDIDO', 'Livro perdido'),
+            ('DANIFICADO', 'Livro danificado')
+        ],
+        required=True,
+        error_messages={'required': 'Por favor, selecione uma ocorrência.'},
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    bloquear_cliente = forms.BooleanField(
+        initial=True,
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+    )

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Livro, Emprestimo, Reserva
+from .models import Livro, Emprestimo, Reserva, Infracao
 
 @admin.register(Livro)
 class LivroAdmin(admin.ModelAdmin):
@@ -21,3 +21,7 @@ class ReservaAdmin(admin.ModelAdmin):
     search_fields = ('cliente__nome', 'livro__nome')
     list_filter = ('status', 'data_solicitacao')
     ordering = ('-data_solicitacao',)
+@admin.register(Infracao)
+class InfracaoAdmin(admin.ModelAdmin):
+    list_display = ('emprestimo', 'ocorrencia', 'bloquear_cliente')
+

@@ -42,24 +42,35 @@
                     <td>
 
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static"
-                                aria-expanded="false">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                data-bs-display="static" aria-expanded="false">
                                 Ações
                             </button>
                             <ul class="dropdown-menu">
-                               {% if emprestimo.status != 'FINALIZADO'%}
+                                {% if emprestimo.status != 'FINALIZADO'%}
                                 <li> <a href="{% url 'renovar' id_emprestimo=emprestimo.id %}" class="dropdown-item">
                                         Renovar
                                     </a></li>
-                                    <li> <a href="{% url 'devolver_emprestimo' id_emprestimo=emprestimo.id %}" class="dropdown-item">
-                                    Devolver
-                                </a></li>
-                               {% endif %}
-                                 <!-- <li> <a href="{% url 'editar_emprestimo' emprestimo.id %}"
-                                        class="dropdown-item">Editar</a></li> -->
-                                <li> <a href="{% url 'deletar_emprestimo' emprestimo.id %}"
-                                        class="dropdown-item">Excluir</a></li>
-                                
+                                <li> <a href="{% url 'devolver_emprestimo' id_emprestimo=emprestimo.id %}"
+                                        class="dropdown-item">
+                                        Devolver
+                                    </a></li>
+                                <li> <a href="{% url 'registrar_infracao' emprestimo_id=emprestimo.id %}"
+                                        class="dropdown-item">
+                                        Registrar Infração
+                                    </a></li>
+                                {% endif %}
+                                <li>
+                                    <form method="post" action="{% url 'deletar_emprestimo' emprestimo.id %}" >
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item"
+                                            onclick="return confirm('Tem certeza que deseja excluir este emprestimo?');">
+                                            Excluir
+                                        </button>
+                                    </form>
+                                </li>
+
+
                             </ul>
                         </div>
                     </td>

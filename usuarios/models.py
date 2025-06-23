@@ -13,7 +13,7 @@ class Cliente(models.Model):
     endereco = models.CharField(max_length=30)
     logradouro = models.CharField(max_length=20)
     bairro = models.CharField(max_length=30)
-
+    bloqueado = models.BooleanField(default=False)
 
     def __str__(self):
         return self.nome
