@@ -9,6 +9,8 @@ from .models import Livro, Emprestimo, Reserva, Infracao
 from usuarios.models import Cliente
 from .forms import LivroForm, RenovarEmprestimoForm, InfracaoForm
 from django.core.mail import send_mail
+from django.utils.timezone import localdate
+from datetime import date, datetime, timedelta
 
 ORDENACAO_LIVROS_LOOKUP = {
     'nome': 'nome',
@@ -177,11 +179,13 @@ def realizar_emprestimo(request, livro_id, cliente_id):
         )
         return redirect('gerenciar_emprestimos')
 
-  
+    hoje = localdate()
+    devolucao_sugerida = hoje + timedelta(days=7)
+    
     return render(request, 'emprestimos/finalizar_emprestimo.html', {
         'livro': livro,
         'cliente': cliente,
-        'data_emprestimo': '',
+        'data_emprestimo': hoje.strftime('%Y-%m-%d'),
         'data_devolucao': '',
     })
 @login_required
