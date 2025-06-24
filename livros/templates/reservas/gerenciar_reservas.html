@@ -28,11 +28,9 @@
                     <th>Data da Reserva</th>
                     <th>Status</th>
                     <th>Ações</th>
-                    <th>teste</th>
                 </tr>
             </thead>
             <tbody>
-
                 {% for reserva in reservas %}
                 <tr>
                     <td>{{ reserva.cliente.nome }}</td>
@@ -40,17 +38,10 @@
                     <td>{{ reserva.data_solicitacao | date:"d/m/Y" }}</td>
                     <td>{{ reserva.get_status_display }}</td>
                     <td>
-                        <!-- <a href="{% url 'deletar_reserva' reserva.id %}" class="btn btn-warning btn-sm">Deletar</a> -->
-
-                    </td>
-                    <td>
-                        {{ reserva.is_primeira|yesno:"Sim,Não" }}
-                        {{ reserva.livro.exemplares_disponiveis|yesno:"Exemplares disponíveis,Sem exemplaresdisponíveis" }}
-
-
+                        <a href="{% url 'deletar_reserva' reserva.id %}" class="btn btn-warning btn-sm">Deletar</a>
                         {% if reserva.is_primeira and reserva.livro.exemplares_disponiveis > 0 %}
                         <a href="{% url 'realizar_emprestimo' reserva.livro.id reserva.cliente.id %}"
-                            class="btn btn-sm btn-primary mt-1">
+                            class="btn btn-sm btn-primary">
                             Realizar Empréstimo
                         </a>
                         {% endif %}
