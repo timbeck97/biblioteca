@@ -313,7 +313,10 @@ def devolver_emprestimo(request, id_emprestimo):
         emprestimo.status = 'FINALIZADO'
         emprestimo.data_devolucao = datetime.strptime(data_devolucao, '%Y-%m-%d').date()
         emprestimo.save()
-        primeira_reserva = Reserva.objects.filter(livro_id=emprestimo.livro.id).order_by('data_solicitacao').first()
+        primeira_reserva = Reserva.objects.filter(
+            livro_id=emprestimo.livro.id,
+            status='AGUARDANDO'
+        ).order_by('data_solicitacao').first()
         if primeira_reserva:
             print(f'EXISTE UMA RESERVA PARA O LIVRO {primeira_reserva.livro} no nome de {primeira_reserva.cliente}, enviando email para {primeira_reserva.cliente.email}')
                
