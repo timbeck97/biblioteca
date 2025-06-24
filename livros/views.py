@@ -381,8 +381,9 @@ def gerenciar_reservas(request):
 def selecionar_livro_reserva(request):
     busca = request.GET.get('busca','')
     livros = Livro.objects.all()
-    # Exibe apenas livros sem exemplares disponíveis
-    livros = [l for l in livros if l.exemplares_disponiveis() == 0]
+    # Exibe apenas livros sem exemplares disponíveis (considera reservas, por exemplo se um livro 
+    # tiver 1 exemplar disponível e 1 reserva, ele será exibido)
+    livros = [l for l in livros if l.pode_ser_reservado()]
     if busca:
         livros = [l for l in livros if busca.lower() in l.nome.lower()]
     dados = {
