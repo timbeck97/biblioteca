@@ -114,10 +114,12 @@ def selecionar_livro_emprestimo(request):
 @login_required
 def selecionar_cliente_emprestimo(request, id):
     livro = get_object_or_404(Livro, id=id)
-    if livro.exemplares_disponiveis()<=0:
+    if livro.exemplares_disponiveis() <= 0:
         messages.error(request, 'Não existem exemplares disponíveis da obra selecionada.')
         return redirect('selecionar_livro_emprestimo')
     clientes = Cliente.objects.all()
+    for cliente in clientes:
+        cliente.tem_prioridade = livro.esta_disponivel_para_cliente(cliente)
     dados = {
         'livro': livro,
         'clientes': clientes,
@@ -129,33 +131,38 @@ def selecionar_cliente_emprestimo(request, id):
 def realizar_emprestimo(request, livro_id, cliente_id):
     livro = get_object_or_404(Livro, id=livro_id)
     cliente = get_object_or_404(Cliente, id=cliente_id)
+    reserva_ativa = Reserva.objects.filter(livro=livro, status='AGUARDANDO').order_by('data_solicitacao').first()
+    if reserva_ativa and reserva_ativa.cliente != cliente:
+        messages.error(request, f'Este livro está reservado para outro cliente: {reserva_ativa.cliente.nome}.')
+        return redirect('gerenciar_emprestimos')
 
     if request.method == 'POST':
         data_emprestimo = request.POST.get('data_emprestimo')
         data_devolucao = request.POST.get('data_devolucao')
 
-    
+        # Impedir empréstimo se houver reserva de outro cliente
+        reserva_ativa = Reserva.objects.filter(livro=livro, status='AGUARDANDO').order_by('data_solicitacao').first()
+        if reserva_ativa and reserva_ativa.cliente != cliente:
+            messages.error(request, f'Este livro está reservado para outro cliente: {reserva_ativa.cliente.nome}.')
+            return redirect('gerenciar_emprestimos')
+
         erros = []
         if not data_emprestimo:
             erros.append('Data de empréstimo é obrigatória.')
         if not data_devolucao:
             erros.append('Data de devolução é obrigatória.')
-    
+
         if data_emprestimo and data_devolucao:
             try:
                 dt_emprestimo = datetime.strptime(data_emprestimo, '%Y-%m-%d').date()
                 dt_devolucao = datetime.strptime(data_devolucao, '%Y-%m-%d').date()
-              
                 hoje = localdate()
                 if dt_emprestimo < hoje:
                     erros.append('A data de empréstimo não pode ser anterior a hoje.')
-
                 if dt_devolucao < hoje:
                     erros.append('A data de devolução não pode ser anterior a hoje.')
-
                 if dt_devolucao <= dt_emprestimo:
                     erros.append('Data de devolução deve ser posterior à data de empréstimo.')
-
             except ValueError:
                 erros.append('Formato de data inválido. Use yyyy-mm-dd.')
 
@@ -169,7 +176,6 @@ def realizar_emprestimo(request, livro_id, cliente_id):
                 'data_devolucao': data_devolucao,
             })
 
-       
         Emprestimo.objects.create(
             cliente=cliente,
             livro=livro,
@@ -177,11 +183,15 @@ def realizar_emprestimo(request, livro_id, cliente_id):
             data_devolucao=data_devolucao,
             status='EM_ANDAMENTO'
         )
+        # Finaliza reserva associada ao cliente
+        reserva = Reserva.objects.filter(cliente=cliente, livro=livro, status='AGUARDANDO').first()
+        if reserva:
+            reserva.status = 'FINALIZADA'
+            reserva.save()
         return redirect('gerenciar_emprestimos')
 
     hoje = localdate()
     devolucao_sugerida = hoje + timedelta(days=7)
-    
     return render(request, 'emprestimos/finalizar_emprestimo.html', {
         'livro': livro,
         'cliente': cliente,
@@ -336,24 +346,45 @@ def devolver_emprestimo(request, id_emprestimo):
         'data_devolucao': emprestimo.data_devolucao.strftime('%Y-%m-%d'),
     })
 
-        
-    
 @login_required
 def gerenciar_reservas(request):
     busca = request.GET.get('busca', '')
+
     if busca:
         reservas = Reserva.objects.filter(
-            Q(cliente__nome__icontains=busca) | Q(livro__nome__icontains=busca)
+            Q(cliente__nome__icontains=busca) |
+            Q(livro__nome__icontains=busca)
         )
     else:
         reservas = Reserva.objects.all()
+
+    # Otimiza acesso aos relacionamentos
+    reservas = reservas.select_related('livro', 'cliente')
+
+    # Descobre a primeira reserva aguardando por livro
+    primeira_reserva_id_por_livro = {}
+    for reserva in reservas:
+        if reserva.livro_id not in primeira_reserva_id_por_livro:
+            primeira = Reserva.objects.filter(
+                livro_id=reserva.livro_id,
+                status='AGUARDANDO'
+            ).order_by('data_solicitacao').first()
+            if primeira:
+                primeira_reserva_id_por_livro[reserva.livro_id] = primeira.id
+
+    # Marca a reserva como sendo a primeira da fila ou não
+    for reserva in reservas:
+        reserva.is_primeira = reserva.id == primeira_reserva_id_por_livro.get(reserva.livro_id)
+
     return render(request, 'reservas/gerenciar_reservas.html', {'reservas': reservas})
 @login_required
 def selecionar_livro_reserva(request):
     busca = request.GET.get('busca','')
     livros = Livro.objects.all()
+    # Exibe apenas livros sem exemplares disponíveis
+    livros = [l for l in livros if l.exemplares_disponiveis() == 0]
     if busca:
-        livros = livros.filter(nome__icontains=busca)
+        livros = [l for l in livros if busca.lower() in l.nome.lower()]
     dados = {
         'livros':livros,
         'redirect':'selecionar_cliente_reserva'
@@ -376,14 +407,24 @@ def realizar_reserva(request, livro_id, cliente_id):
     livro = get_object_or_404(Livro, id=livro_id)
     cliente = get_object_or_404(Cliente, id=cliente_id)
 
-    if request.method == 'POST':
-        Reserva.objects.create(
-            cliente=cliente,
-            livro=livro
-        )
+    if livro.exemplares_disponiveis() > 0:
+        messages.error(request, 'O livro ainda está disponível para empréstimo, não pode ser reservado.')
+        return redirect('selecionar_livro_reserva')
+
+    reserva_existente = Reserva.objects.filter(cliente=cliente, livro=livro, status='AGUARDANDO').exists()
+    if reserva_existente:
+        messages.warning(request, 'Este cliente já tem uma reserva ativa para este livro.')
         return redirect('gerenciar_reservas')
 
-  
+    if cliente.bloqueado:
+        messages.error(request, 'O cliente está bloqueado e não pode reservar livros.')
+        return redirect('gerenciar_reservas')
+
+    if request.method == 'POST':
+        Reserva.objects.create(cliente=cliente, livro=livro)
+        messages.success(request, f'Reserva registrada com sucesso para {cliente.nome}.')
+        return redirect('gerenciar_reservas')
+
     return render(request, 'reservas/finalizar_reserva.html', {
         'livro': livro,
         'cliente': cliente,

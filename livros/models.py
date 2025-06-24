@@ -35,9 +35,24 @@ class Livro(models.Model):
     genero = models.CharField(max_length=20, choices=GENEROS, default='ficcao')
     quantidade = models.PositiveIntegerField(default=0)
     def exemplares_disponiveis(self):
-        quantidade_emprestimos = self.emprestimo_set.exclude(status='FINALIZADO').count()
-        disponiveis = self.quantidade - quantidade_emprestimos
-        return max(disponiveis, 0)
+        emprestimos_ativos = self.emprestimo_set.exclude(status='FINALIZADO').count()
+        return max(self.quantidade - emprestimos_ativos, 0)
+    def esta_disponivel_para_cliente(self, cliente):
+        if self.exemplares_disponiveis() <= 0:
+            return False
+        primeira_reserva = self.reserva_set.filter(status='AGUARDANDO').order_by('data_solicitacao').first()
+        if not primeira_reserva:
+            return True
+        return primeira_reserva.cliente == cliente
+    def esta_reservado_para_outro(self, cliente):
+        reserva = self.reserva_set.filter(status='AGUARDANDO').order_by('data_solicitacao').first()
+        return reserva and reserva.cliente != cliente
+    def esta_reservado_para_alguem(self):
+        return self.reserva_set.filter(status='AGUARDANDO').exists()
+    def proxima_reserva(self):
+        return self.reserva_set.filter(status='AGUARDANDO').order_by('data_solicitacao').first()
+    def pode_ser_reservado(self):
+        return self.exemplares_disponiveis() == 0
     def __str__(self):
         return self.nome
     def save(self, *args, **kwargs):

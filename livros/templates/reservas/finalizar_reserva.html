@@ -1,46 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Confirmar Empréstimo{% endblock %}
+{% block title %}Confirmar Reserva{% endblock %}
 
 {% block content %}
 <div class="container my-4">
-
-  <!-- Card do livro -->
-  <div class="card shadow-sm mb-4 p-3">
-    <div class="d-flex flex-column flex-md-row align-items-center">
-      <div style="min-width: 200px; max-width: 200px;">
-        {% if livro.url %}
-          <img src="{{ livro.url }}" alt="Capa do livro {{ livro.nome }}" class="img-fluid" style="max-height: 300px; object-fit: contain;">
-        {% else %}
-          <div class="bg-light d-flex justify-content-center align-items-center" style="height: 300px;">
-            <span class="text-muted">Sem imagem disponível</span>
-          </div>
-        {% endif %}
-      </div>
-      <div class="ms-md-4 mt-3 mt-md-0 flex-grow-1">
-        <h2>{{ livro.nome }}</h2>
-        <h5 class="text-muted">Autor: {{ livro.autor }}</h5>
-        <p>{{ livro.descricao }}</p>
-        <p class="text-muted">Publicado em: {{ livro.ano_publicacao }}</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Cliente e confirmação -->
-  <div class="card shadow-sm p-3 mb-4">
-    <h4 class="mb-3">Confirmar Reserva</h4>
-
-    <p><strong>Cliente:</strong> {{ cliente.nome }}</p>
-    <p><strong>CPF:</strong> {{ cliente.cpf }}</p>
-    
-    {% include 'messages.html' %}
-    
-    <form method="post">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-primary">Confirmar Empréstimo</button>
-      <a href="{% url 'gerenciar_emprestimos' %}" class="btn btn-secondary">Voltar</a>
-    </form>
-  </div>
-
+  <h2>Confirmar Reserva</h2>
+  <p><strong>Cliente:</strong> {{ cliente.nome }}</p>
+  <p><strong>Livro:</strong> {{ livro.nome }}</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success">Confirmar Reserva</button>
+    <a href="{% url 'gerenciar_reservas' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
 </div>
 {% endblock %}

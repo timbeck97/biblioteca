@@ -1,5 +1,5 @@
-from django.urls import path
 from . import views
+from django.urls import path
 
 urlpatterns = [
     path('', views.livros, name='livros'),
@@ -20,11 +20,11 @@ urlpatterns = [
     path('emprestimos/<int:id_emprestimo>/renovar', views.renovar, name='renovar'),
     path('emprestimos/<int:id_emprestimo>/devolver', views.devolver_emprestimo, name='devolver_emprestimo'),
 
-    path('reservas', views.gerenciar_reservas, name='gerenciar_reservas'),
-    path('reservas/selecionar-livro', views.selecionar_livro_reserva, name='selecionar_livro_reserva'),
-    path('reservas/<int:id>/selecionar-cliente', views.selecionar_cliente_reserva, name='selecionar_cliente_reserva'),
-    path('reservas/realizar/<int:livro_id>/<int:cliente_id>', views.realizar_reserva, name='realizar_reserva'),
-    path('reservas/deletar/<int:id>', views.deletar_reserva, name='deletar_reserva'),
+    path('reservas/', views.gerenciar_reservas, name='gerenciar_reservas'),
+    path('reservas/livro/', views.selecionar_livro_reserva, name='selecionar_livro_reserva'),
+    path('reservas/cliente/<int:id>/', views.selecionar_cliente_reserva, name='selecionar_cliente_reserva'),
+    path('reservas/finalizar/<int:livro_id>/<int:cliente_id>/', views.realizar_reserva, name='realizar_reserva'),
+    path('reservas/deletar/<int:id>/', views.deletar_reserva, name='deletar_reserva'),
 
     path('infracaoes', views.infracoes, name='infracoes'),
     path('infracao/<int:emprestimo_id>', views.registrar_infracao, name='registrar_infracao'),
