@@ -46,14 +46,17 @@
               <td>{{ cliente.nome }}</td>
               <td>{{ cliente.cpf }}</td>
               <td>
+                {# Botão de ação depende do tipo de operação: empréstimo ou reserva #}
                 {% if cliente.tem_prioridade %}
-                <a href="{% url redirect livro.id cliente.id %}" class="btn btn-primary btn-sm">
-                  Selecionar
-                </a>
+                  {% if redirect == 'realizar_emprestimo' %}
+                    <a href="{% url 'realizar_emprestimo' livro.id cliente.id %}" class="btn btn-primary btn-sm">Selecionar</a>
+                  {% elif redirect == 'realizar_reserva' %}
+                    <a href="{% url 'realizar_reserva' livro.id cliente.id %}" class="btn btn-primary btn-sm">Selecionar</a>
+                  {% endif %}
                 {% else %}
-                <button class="btn btn-secondary btn-sm" disabled>
-                  Unidades já Reservadas
-                </button>
+                  <button class="btn btn-secondary btn-sm" disabled>
+                    Unidades já Reservadas
+                  </button>
                 {% endif %}
               </td>
             </tr>

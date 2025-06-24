@@ -51,11 +51,11 @@ class Livro(models.Model):
         return self.reserva_set.filter(status='AGUARDANDO').exists()
     def proxima_reserva(self):
         return self.reserva_set.filter(status='AGUARDANDO').order_by('data_solicitacao').first()
-    def pode_ser_reservado(self):
-        emprestimos_ativos = self.emprestimo_set.exclude(status='FINALIZADO').count()
+    def exemplares_nao_reservados(self):
         reservas_ativas = self.reserva_set.filter(status='AGUARDANDO').count()
-        print(f"Reservas ativas: {reservas_ativas}")
-        return (emprestimos_ativos + reservas_ativas) >= self.quantidade
+        return max(self.exemplares_disponiveis() - reservas_ativas, 0)
+    def pode_ser_reservado(self):
+        return self.exemplares_nao_reservados() <= 0
     def __str__(self):
         return self.nome
     def save(self, *args, **kwargs):

@@ -380,10 +380,7 @@ def gerenciar_reservas(request):
 @login_required
 def selecionar_livro_reserva(request):
     busca = request.GET.get('busca','')
-    livros = Livro.objects.all()
-    # Exibe apenas livros sem exemplares disponíveis (considera reservas, por exemplo se um livro 
-    # tiver 1 exemplar disponível e 1 reserva, ele será exibido)
-    livros = [l for l in livros if l.pode_ser_reservado()]
+    livros = [l for l in Livro.objects.all() if l.pode_ser_reservado()]
     if busca:
         livros = [l for l in livros if busca.lower() in l.nome.lower()]
     dados = {
@@ -396,6 +393,10 @@ def selecionar_livro_reserva(request):
 def selecionar_cliente_reserva(request, id):
     livro = get_object_or_404(Livro, id=id)
     clientes = Cliente.objects.all()
+    for cliente in clientes:
+        # Se a pessoa ja tiver uma reserva pra esse livro, nao pode reservar novamente
+        reserva_ativa = Reserva.objects.filter(cliente=cliente, livro=livro, status='AGUARDANDO').exists()
+        cliente.tem_prioridade = not reserva_ativa
     dados = {
         'livro': livro,
         'clientes': clientes,
@@ -408,7 +409,7 @@ def realizar_reserva(request, livro_id, cliente_id):
     livro = get_object_or_404(Livro, id=livro_id)
     cliente = get_object_or_404(Cliente, id=cliente_id)
 
-    if livro.exemplares_disponiveis() > 0:
+    if  not livro.pode_ser_reservado() > 0:
         messages.error(request, 'O livro ainda está disponível para empréstimo, não pode ser reservado.')
         return redirect('selecionar_livro_reserva')
 
