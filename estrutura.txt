@@ -1,0 +1,86 @@
+appbiblioteca
+  settings.py
+  urls.py
+  wsgi.py
+core
+  admin.py
+  apps.py
+  migrations
+  models.py
+  tests.py
+  views.py
+db.sqlite3
+estrutura.txt
+livros
+  admin.py
+  apps.py
+  forms.py
+  migrations
+    0001_initial.py
+    0002_initial.py
+    0003_remove_livro_data_publicacao_livro_ano_publicacao.py
+    0004_livro_genero_livro_isbn_livro_quantidade.py
+    0005_reserva_data_devolucao_alter_reserva_data_reserva.py
+    0006_remove_reserva_data_devolucao_and_more.py
+    0007_infracao.py
+    0008_infracao_bloquear_cliente.py
+    0009_infracao_data_infracao.py
+  models.py
+  templates
+    emprestimos
+      confirmar_devolucao.html
+      confirmar_renovacao.html
+      finalizar_emprestimo.html
+      gerenciar_emprestimos.html
+    livros
+      cadastrar_livro.html
+      detalhe_livro.html
+      gerenciar_livros.html
+      infracoes.html
+      lista_livros.html
+      registrar_infracao.html
+      selecionar_cliente.html
+      selecionar_livro.html
+    relatorios
+      relatorios.html
+    reservas
+      finalizar_reserva.html
+      gerenciar_reservas.html
+  tests.py
+  urls.py
+  views.py
+manage.py
+notificacoes
+  admin.py
+  apps.py
+  migrations
+  models.py
+  tests.py
+  urls.py
+  views.py
+templates
+  base.html
+  home.html
+  menu.html
+  messages.html
+  registration
+    login.html
+usuarios
+  admin.py
+  apps.py
+  forms.py
+  migrations
+    0001_initial.py
+    0002_cliente_email.py
+    0003_cliente_bloqueado.py
+  models.py
+  templates
+    usuarios
+      cadastrar_cliente.html
+      cadastrar_funcionario.html
+      gerenciar_clientes.html
+      gerenciar_funcionarios.html
+      index.html
+  tests.py
+  urls.py
+  views.py
