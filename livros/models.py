@@ -1,6 +1,7 @@
 from django.db import models
 from usuarios.models import Cliente
 from datetime import datetime
+from stdimage.models import StdImageField
 
 GENEROS = [
         ('FICCAO', 'Ficção'),
@@ -29,7 +30,13 @@ class Livro(models.Model):
     autor = models.CharField(max_length=100)
     descricao = models.TextField()
     ano_publicacao = models.IntegerField(default=datetime.now().year)
-    url = models.URLField(blank=True, null=True)
+    foto = StdImageField(
+        upload_to='fotos/alunos',
+        variations={'thumb': (150, 150), 'medium': (300, 300)},
+        blank=True,
+        null=True
+    )
+
     isbn = models.CharField(max_length=17, blank=True, null=True, unique=True,
                             help_text="ISBN do livro (ex: 978-3-16-148410-0)")
     genero = models.CharField(max_length=20, choices=GENEROS, default='ficcao')

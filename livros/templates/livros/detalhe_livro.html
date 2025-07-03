@@ -8,8 +8,8 @@
         <div class="d-flex flex-column flex-md-row">
             <!-- Imagem à esquerda -->
             <div style="min-width: 300px; max-width: 300px;">
-                {% if livro.url %}
-                <img src="{{ livro.url }}" alt="Capa do livro {{ livro.nome }}" class="img-fluid"
+                {% if livro.foto.thumb.url %}
+                <img src="{{ livro.foto.thumb.url }}" alt="Capa do livro {{ livro.nome }}" class="img-fluid"
                     style="max-height: 400px; object-fit: contain;">
                 {% else %}
                 <div class="bg-light d-flex justify-content-center align-items-center" style="height: 400px;">

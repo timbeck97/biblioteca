@@ -65,7 +65,7 @@ def ordenar_livros(request, ordem):
     return render(request, 'livros/gerenciar_livros.html', dados)
 def cadastrar_livro(request):
     if request.method == 'POST':
-        form = LivroForm(request.POST)
+        form = LivroForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('gerenciar_livros')  # ajuste para a sua URL de destino
@@ -76,7 +76,7 @@ def cadastrar_livro(request):
 def editar_livro(request, id):
     livro = get_object_or_404(Livro, id=id)
     if request.method == 'POST':
-        form = LivroForm(request.POST, instance=livro)
+        form = LivroForm(request.POST,request.FILES, instance=livro)
         if form.is_valid():
             form.save()
             return redirect('gerenciar_livros')
@@ -125,6 +125,8 @@ def selecionar_cliente_emprestimo(request, id):
         'clientes': clientes,
         'redirect':'realizar_emprestimo'
     }
+
+    print(dados)
     return render(request, 'livros/selecionar_cliente.html', dados)
 
 @login_required

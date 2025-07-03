@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path,include
 from core.views import home 
 from django.contrib.auth.views import LoginView, LogoutView
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -28,4 +30,4 @@ urlpatterns = [
     path('usuarios/', include('usuarios.urls')),
     path('accounts/login/', LoginView.as_view(), name='login'),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

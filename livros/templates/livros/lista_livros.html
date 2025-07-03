@@ -8,10 +8,12 @@
         {% for livro in livros %}
         <div class="col">
             <div class="card h-100 shadow-sm">
-                {% if livro.url %}
-                <img src="{{ livro.url }}" alt="Capa do livro {{ livro.nome }}" class="card-img-top" style="max-height: 200px; object-fit: contain;">
+                {% if livro.foto.thumb.url %}
+                <img src="{{ livro.foto.thumb.url }}" alt="Capa do livro {{ livro.nome }}" class="card-img-top"
+                    style="max-height: 200px; object-fit: contain;">
                 {% else %}
-                <div class="d-flex align-items-center justify-content-center bg-light text-muted" style="height: 200px;">
+                <div class="d-flex align-items-center justify-content-center bg-light text-muted"
+                    style="height: 200px;">
                     Sem imagem
                 </div>
                 {% endif %}

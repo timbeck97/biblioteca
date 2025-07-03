@@ -50,7 +50,6 @@ livros
   urls.py
   views.py
 manage.py
-notificacoes
   admin.py
   apps.py
   migrations

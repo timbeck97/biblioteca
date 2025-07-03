@@ -9,12 +9,13 @@
   <div class="card shadow-sm mb-4 p-3">
     <div class="d-flex flex-column flex-md-row align-items-center">
       <div style="min-width: 200px; max-width: 200px;">
-        {% if livro.url %}
-          <img src="{{ livro.url }}" alt="Capa do livro {{ livro.nome }}" class="img-fluid" style="max-height: 300px; object-fit: contain;">
+        {% if livro.foto.thumb.url %}
+        <img src="{{ livro.foto.thumb.url }}" alt="Capa do livro {{ livro.nome }}" class="img-fluid"
+          style="max-height: 300px; object-fit: contain;">
         {% else %}
-          <div class="bg-light d-flex justify-content-center align-items-center" style="height: 300px;">
-            <span class="text-muted">Sem imagem disponível</span>
-          </div>
+        <div class="bg-light d-flex justify-content-center align-items-center" style="height: 300px;">
+          <span class="text-muted">Sem imagem disponível</span>
+        </div>
         {% endif %}
       </div>
       <div class="ms-md-4 mt-3 mt-md-0 flex-grow-1">
@@ -40,7 +41,7 @@
       <div class="mb-3">
         <label for="id_data_devolucao" class="form-label">Data da Devolução</label>
         <input type="date" name="data_devolucao" id="id_data_devolucao" class="form-control"
-               value="{{ data_devolucao|default:'' }}">
+          value="{{ data_devolucao|default:'' }}">
       </div>
 
       <button type="submit" class="btn btn-primary">Confirmar Devolução</button>

@@ -33,9 +33,9 @@ LOGOUT_REDIRECT_URL = '/'
 # Application definition
 
 INSTALLED_APPS = [
+     'stdimage',
     'livros.apps.LivrosConfig',
     'usuarios.apps.UsuariosConfig',
-    'notificacoes.apps.NotificacoesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -131,3 +131,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'timbeck@sou.faccat.br'
 EMAIL_HOST_PASSWORD = 'vsha fhpc szkm dkre'
+
+
+# Configurações de mídia
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
