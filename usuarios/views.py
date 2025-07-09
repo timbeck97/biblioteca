@@ -78,4 +78,15 @@ def deletar_cliente(request, id):
     cliente = get_object_or_404(Cliente, id=id)
     cliente.delete()
     return redirect('gerenciar_clientes')
-  
+@login_required
+def bloquear_cliente(request, id):
+    cliente = get_object_or_404(Cliente, id=id)
+    cliente.bloqueado=True
+    cliente.save()
+    return redirect('gerenciar_clientes')
+@login_required
+def desbloquear_cliente(request, id):
+    cliente = get_object_or_404(Cliente, id=id)
+    cliente.bloqueado=False
+    cliente.save()
+    return redirect('gerenciar_clientes')

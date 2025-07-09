@@ -486,7 +486,7 @@ def deletar_infracao(request, id):
     infracao = get_object_or_404(Infracao, id=id)
     infracao.delete()
     return redirect('infracoes')
-
+@login_required
 def relatorio_emprestimos_cliente(request):
     dados = (
         Emprestimo.objects
@@ -498,7 +498,7 @@ def relatorio_emprestimos_cliente(request):
         'tipo': 'CLIENTE',
         'dados': dados
     })
-
+@login_required
 def relatorio_livros_mais_emprestados(request):
     dados = (
         Emprestimo.objects

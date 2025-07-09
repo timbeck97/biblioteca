@@ -49,6 +49,15 @@
                             <a href="{% url 'deletar_cliente' cliente.id %}" class="btn btn-danger btn-sm">
                                 Excluir
                             </a>
+                            {% if cliente.bloqueado %}
+                                <a href="{% url 'desbloquear_cliente' cliente.id %}" class="btn btn-success btn-sm">
+                                    Desbloquear
+                                </a>
+                            {% else %}
+                                <a href="{% url 'bloquear_cliente' cliente.id %}" class="btn btn-secondary btn-sm">
+                                    Bloquear
+                                </a>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>

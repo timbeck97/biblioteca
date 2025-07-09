@@ -27,7 +27,7 @@ AUTH_PASSWORD_VALIDATORS = []
 DEBUG = True
 
 ALLOWED_HOSTS = []
-LOGIN_REDIRECT_URL = '/livros/' 
+LOGIN_REDIRECT_URL = '/livros/emprestimos' 
 LOGOUT_REDIRECT_URL = '/'
 
 # Application definition
