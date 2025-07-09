@@ -31,16 +31,26 @@
                 {% for funcionario in funcionarios %}
                 <tr>
                     <td>{{ funcionario.username }}</td>
-                    <td>{{ funcionario.ativado }}</td>
+                    <td>{{ funcionario.ativado|yesno:"Sim,Não" }}</td>
                     <td>
-                        <div class="d-flex gap-2">
+                        <div class="d-flex flex-wrap gap-2">
                             <a href="{% url 'editar_funcionario' funcionario.id %}" class="btn btn-warning btn-sm">
                                 Editar
                             </a>
-                            <form method="post" action="{% url 'deletar_funcionario' funcionario.id %}" style="display:inline;">
+                            {% if not funcionario.is_superuser %}
+                             <form method="post" action="{% url 'deletar_funcionario' funcionario.id %}" style="display:inline;">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                             </form>
+                            <form method="post" action="{% url 'ativar_ou_desativar_funcionario' funcionario.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                {% if funcionario.ativado %}
+                                    <button type="submit" class="btn btn-secondary btn-sm">Desativar</button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-success btn-sm">Ativar</button>
+                                {% endif %}
+                            </form>
+                            {% endif  %}
                         </div>
                     </td>
                 </tr>

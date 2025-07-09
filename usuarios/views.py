@@ -90,3 +90,9 @@ def desbloquear_cliente(request, id):
     cliente.bloqueado=False
     cliente.save()
     return redirect('gerenciar_clientes')
+@login_required
+def ativar_ou_desativar_funcionario(request, id):
+    funcionario = get_object_or_404(Funcionario, id=id)
+    funcionario.ativado = not funcionario.ativado
+    funcionario.save()
+    return redirect('gerenciar_funcionarios') 
