@@ -64,8 +64,8 @@
                                     <form method="post" action="{% url 'deletar_emprestimo' emprestimo.id %}">
                                         {% csrf_token %}
                                         <button type="submit" class="dropdown-item"
-                                            onclick="return confirm('Tem certeza que deseja cancelar este emprestimo?');">
-                                            Cancelar
+                                            onclick="return confirm('Tem certeza que deseja excluir este emprestimo?');">
+                                            Excluir
                                         </button>
                                     </form>
                                 </li>
